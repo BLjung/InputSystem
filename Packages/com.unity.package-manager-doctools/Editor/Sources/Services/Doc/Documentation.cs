@@ -125,12 +125,14 @@ namespace UnityEditor.PackageManager.DocumentationTools.UI
         ///<param name="outputFolder">(Optional) Output folder where the doc site should be created.</param>
         public string Generate(PackageInfo packageInfo, string version, string outputFolder = null)
         {
+            string buildlog = "Nothing generated.";
             var packageName = packageInfo.name;
             var shortVersionId = GetShortVersionId(packageName, version);
 
             if (!Builder.TryBuildRedirectToManual(packageName, shortVersionId, outputFolder))
-                return Builder.BuildWithProgress(packageInfo, shortVersionId, outputFolder);                    // Always re-build
-            return default;
+                buildlog = Builder.BuildWithProgress(packageInfo, shortVersionId, outputFolder);                    // Always re-build
+
+            return buildlog;
         }
 
         /// <summary>
@@ -149,10 +151,10 @@ namespace UnityEditor.PackageManager.DocumentationTools.UI
         {
             if (string.IsNullOrEmpty(absoluteLatestShortVersionId))
                 absoluteLatestShortVersionId = GetShortVersionId(packageName, latestVersionId);
-
+            
             Builder.BuildRedirectToLatestPage(packageName, GetShortVersionId(packageName, latestVersionId), absoluteLatestShortVersionId, outputFolder);
         }
-
+        
         /// <summary>
         /// Generate metadata for a package.
         /// </summary>
